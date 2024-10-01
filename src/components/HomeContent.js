@@ -37,7 +37,8 @@ const Greeting = styled.div`
     display: flex;
     background-color: #2B2B2B;
     width: 60%;
-    height: 25%;
+    height: 20vh;
+    margin-top: 10vh;
     border-radius: 25px;
     flex-direction: column;
 `;
@@ -45,7 +46,7 @@ const Greeting = styled.div`
 const GreetingText = styled.a`
     color: #4717F6;
     font-size: 3em;
-    margin: 2.5%;
+    margin-left: 2vw;
     font-family: "Poppins", system-ui;
 `;
 
@@ -53,16 +54,18 @@ const Search = styled.div`
     display: flex;
     width: 100%;
     height: 50%;
-    justify-content: center;
-    margin-top: 5%;
+    justify-content: center;;
 `;
 
 const SearchBar = styled.input`
-    width: 95%;
+    width: 90%;
     border: 1px solid #4717F6;
-    height: 70%;
+    height: 4vh;
+    margin-top: 2vh;
     background: none;
     border-radius: 25px;
+    font-size: 2.5em;
+    padding: 1.5vh;
 `;
 
-export default HomeContent
+export default HomeContent;

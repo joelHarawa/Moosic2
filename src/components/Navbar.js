@@ -30,7 +30,7 @@ const Navbar = () => {
 const Container = styled.div`
     background-color: #2B2B2B;
     display: flex;
-    height: 10%;
+    height: 10vh;
 `;
 
 // Left side of the Navbar
