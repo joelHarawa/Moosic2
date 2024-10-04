@@ -1,8 +1,10 @@
 // Title: HomeContent.js
 // Author: Joel Harawa
+import React, {useState} from "react";
 import styled, {keyframes} from "styled-components";
 
 const HomeContent = () => {
+    const [userMood, setUserMood] = useState();
     return (
         <Container>
             <Greeting>
@@ -10,7 +12,10 @@ const HomeContent = () => {
                     Hi Guest, How are we feeling?
                 </GreetingText>
                 <Search>
-                    <SearchBar/>
+                    <SearchBar
+                        placeholder="Enter your mood..."
+
+                    />
                 </Search>
             </Greeting>
         </Container>
@@ -54,18 +59,19 @@ const Search = styled.div`
     display: flex;
     width: 100%;
     height: 50%;
-    justify-content: center;;
+    justify-content: center;
 `;
 
 const SearchBar = styled.input`
     width: 90%;
     border: 1px solid #4717F6;
-    height: 4vh;
-    margin-top: 2vh;
+    height: 2vh;
+    margin-top: 3vh;
     background: none;
     border-radius: 25px;
-    font-size: 2.5em;
+    font-size: 1.5em;
     padding: 1.5vh;
+    color: #A239CA;
 `;
 
 export default HomeContent;

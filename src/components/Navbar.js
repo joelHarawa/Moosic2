@@ -4,9 +4,12 @@
 
 import styled from "styled-components";
 import isMobile from "is-mobile";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../AuthContext";
 
 const Navbar = () => {
+    const token = window.localStorage.getItem("token");
+    const {login, logout} = useContext(AuthContext);
     const [isMobileDevice, setIsMobileDevice] = useState(false);
 
     useEffect(() => {
@@ -19,10 +22,15 @@ const Navbar = () => {
             <Middle>
                 <Logo ismobile={isMobileDevice.toString()}>Moosic</Logo>
             </Middle>
-            <Right>
-                <ProfileContainer ismobile={isMobileDevice.toString()}>
-                </ProfileContainer>
-            </Right>
+                {token ? 
+                    <Right>
+                        <ProfileContainer ismobile={isMobileDevice.toString()} onClick={logout}/>
+                        <MenuItem href="/">Logout</MenuItem>
+                    </Right>:
+                    <Right>
+                        <ProfileContainer ismobile={isMobileDevice.toString()} onClick={login}/>
+                    </Right>
+                }
         </Container>
     )
 }
@@ -69,6 +77,21 @@ const ProfileContainer = styled.div`
     height: ${(props) => (props.ismobile === "true" ? "30px" : "40px")};
     margin-right: ${(props) => (props.ismobile === "true" ? "10px" : "50px")};
     width: ${(props) => (props.ismobile === "true" ? "30px" : "40px")};
+    &:hover {
+        cursor: pointer;
+    }
+`;
+
+const MenuItem = styled.a`
+    font-family: "Poppins", system-ui;
+    font-size: 1.25em;
+    color: #4717F6;
+    margin-right: 50px;
+    text-decoration: none;
+    &:hover {
+        text-decoration: none;
+        color: white;
+    }
 `;
 
 export default Navbar;
