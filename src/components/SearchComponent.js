@@ -5,62 +5,33 @@ import { AuthContext } from "../AuthContext";
 import styled, {keyframes} from "styled-components";
 
 const SearchComponent = () => {
-    let moodData = require("../data/moods.json")
+    const [filteredMoods, setFilteredMoods] = useState({});
+    const [moodData, setMoodData] = useState({});
     const [searchInput, setSearchInput] = useState("");
     const [username, setUsername] = useState("Guest");
-const [artists, setArtists] = useState({});
-    const { token, login } = useContext(AuthContext);
-    console.log(token);
-
-    useEffect(() => { 
-        const fetchData = async () => {
-            try {
-                if (token) {
-                    const userResponse = await fetch("https://api.spotify.com/v1/me", {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    });
-
-                    const artistsResponse = await fetch("https://api.spotify.com/v1/me/top/artists/", {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    });
-
-
-                    if (!userResponse.ok || !artistsResponse.ok) {
-                        throw new Error("Failed to fetch data");
-                    }
-
-                    const userData = await userResponse.json();
-                    const artistData = await artistsResponse.json();
-
-                    setUsername(userData.display_name || "Guest");
-                    console.log(artistData.items);
-                    setArtists(artistData.items);
-                    console.log(userData);
-                } else {
-                    console.log("No token found, using default Guest username.");
-                    setUsername("Guest");
-                }
-            } catch (error) {
-                console.error("Error fetching data:", error);
-                setUsername("Guest");
-            }
-        };
-
-        fetchData();
-    }, [token]);
-
+    const [artists, setArtists] = useState({});
+    // const { token, login } = useContext(AuthContext);
+    
+    // Get the user's profile information
     useEffect(() => {
-        console.log("Updated artists:", artists);
-    }, [artists]);
+        const fetchProfile = () => {
 
+        }
+        fetchProfile();
+    }, []);
+    
+    useEffect(() => {
+        const fetchMoods = async () => {
+            const response = await fetch("http://localhost:4000/api/get/moods");
+            if (!response.ok) {
+                throw new Error("Failed to fetch moods");
+            }
 
-    const handleSearch = (event) => {
-        setSearchInput(event.target.value);
-    }
+            const data = await response.json(); // Parse the response as JSON
+            setMoodData(Object.keys(data.moods));
+        }
+        fetchMoods();
+    }, []);
 
     const generatePlaylist = async (mood) => {
         try {
@@ -71,8 +42,8 @@ const [artists, setArtists] = useState({});
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        message: "HI",
                         userMood: mood
+
                     }),
                 })
             } else {
@@ -83,9 +54,19 @@ const [artists, setArtists] = useState({});
         }
     }
 
-    const filteredMoods = moodData.moods.filter((mood) =>
-        mood.toLowerCase().includes(searchInput.toLowerCase())
-    );
+    const handleSearch = (input) => { 
+        setSearchInput(input);
+        console.log(filteredMoods);
+        if (!moodData || moodData.length <= 0) {
+            console.error("moods is not an array");
+            return {};  
+        }
+        const filtered = moodData.filter((mood) =>
+            mood.toLowerCase().includes(input.toLowerCase())
+        );
+    
+        setFilteredMoods(filtered);
+    }
 
     return (
         <SearchBox>
@@ -97,21 +78,22 @@ const [artists, setArtists] = useState({});
             <SearchArea>
             <SearchBar 
                 placeholder="Enter your mood..."
-                value={searchInput}
-                onChange={handleSearch}
+                onChange={(e) => handleSearch(e.target.value)}
             />
             </SearchArea>
-            {
-                searchInput.length > 0 && (
                 <Dropdown>
                     {
-                        filteredMoods.map((mood, index) => (
-                            <Result key={index} onClick={() => generatePlaylist(mood)}>{mood}</Result>
-                        ))
+                        searchInput.length > 0 && filteredMoods.length > 0 ? (
+                            filteredMoods.map((mood, index) => (
+                                <Result 
+                                    key={index} 
+                                    onClick={() => generatePlaylist(mood)}>
+                                        {mood}
+                                </Result>
+                            ))
+                        ) : ""
                     }
                 </Dropdown>
-                )
-            }
         </SearchBox>
     )
 }
@@ -165,10 +147,11 @@ const SearchBar = styled.input`
     background-color: #2B2B2B;
     color: #A239CA;
     outline: none;
+    margin-top: 2%;
 `;
 
 const Dropdown = styled.ul`
-    margin-top: 5%;
+    margin-top: 2.5%;
     width: 90%;
     list-style: none;
     padding-left: 0vh;

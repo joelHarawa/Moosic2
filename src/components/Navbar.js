@@ -9,36 +9,21 @@ import { AuthContext } from "../AuthContext";
 
 const Navbar = () => {
     const [photo, setPhoto] = useState("https://img.icons8.com/?size=100&id=z-JBA_KtSkxG&format=png&color=000000");
-    const {token, login, logout} = useContext(AuthContext);
+    //const {token, login, logout} = useContext(AuthContext);
     const [isMobileDevice, setIsMobileDevice] = useState(false);
 
     useEffect(() => {
         setIsMobileDevice(isMobile());
     }, [isMobileDevice]);
 
-    useEffect(() => { 
-        const fetchData = async () => {
-            if (token !== null) {
-                console.log(token);
-                await fetch("https://api.spotify.com/v1/me", {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data) {
-                        setPhoto(data.images[0].url);
-                        console.log(data.images);
-                    }
-                })
-            
-            } else {
-                setPhoto("https://img.icons8.com/?size=100&id=z-JBA_KtSkxG&format=png&color=000000");
-            }
-        }
-        fetchData();
-    }, [token]);
+    const login = async () => {
+        const resposnse = await fetch("http://localhost:4000/api/auth/login");
+        console.log(resposnse.data);
+    }
+
+    const logout = async () => {
+
+    }
 
     return (
         <Container>
@@ -46,7 +31,7 @@ const Navbar = () => {
             <Middle>
                 <Logo ismobile={isMobileDevice.toString()}>Moosic</Logo>
             </Middle>
-                {token ? 
+                {1 === 2 ? 
                     <Right>
                         <ProfileContainer ismobile={isMobileDevice.toString()}>
                             <ProfilePhoto src={photo}/>

@@ -1,33 +1,68 @@
 {
-    "moods": [
-      "Happy",
-      "Sad",
-      "Energetic",
-      "Calm",
-      "Romantic",
-      "Uplifting",
-      "Melancholic",
-      "Motivational",
-      "Dreamy",
-      "Mysterious",
-      "Playful",
-      "Serene",
-      "Triumphant",
-      "Hopeful",
-      "Nostalgic",
-      "Gloomy",
-      "Whimsical",
-      "Reflective",
-      "Peaceful",
-      "Intense",
-      "Lit",
-      "Hype",
-      "Gassed",
-      "Down Bad",
-      "Low",
-      "Hopeless",
-      "Stressed",
-      "Chill",
-      "Pumped"
-    ]
+    "moods": {
+      "Calm":{
+        "min_acousticness": 0.20,
+        "max_acousticness": 0.99,
+        "min_danceability": 0.01,
+        "max_danceability": 0.70,
+        "min_energy": 0.01,
+        "max_energy": 0.60
+      },
+      "Energetic": {
+        "min_acousticness": 0.01,
+        "max_acousticness": 0.60,
+        "min_danceability": 0.60,
+        "max_danceability": 0.99,
+        "min_energy": 0.60,
+        "max_energy": 0.99
+      },
+      "Happy": {
+        "min_acousticness": 0.01,
+        "max_acousticness": 0.90,
+        "min_danceability": 0.40,
+        "max_danceability": 0.90,
+        "min_energy": 0.40,
+        "max_energy": 0.90
+      },
+      "Melancholic": {
+        "min_acousticness": 0.41,
+        "max_acousticness": 0.99,
+        "min_danceability": 0.01,
+        "max_danceability": 0.50,
+        "min_energy": 0.01,
+        "max_energy": 0.60
+      },
+      "Motivational": {
+        "min_acousticness": 0.01,
+        "max_acousticness": 0.71,
+        "min_danceability": 0.01,
+        "max_danceability": 0.60,
+        "min_energy": 0.40,
+        "max_energy": 0.90
+      },
+      "Romantic": {
+        "min_acousticness": 0.30,
+        "max_acousticness": 0.90,
+        "min_danceability": 0.20,
+        "max_danceability": 0.80,
+        "min_energy": 0.20,
+        "max_energy": 0.80
+      },
+      "Sad": {
+        "min_acousticness": 0.01,
+        "max_acousticness": 0.90,
+        "min_danceability": 0.01,
+        "max_danceability": 0.60,
+        "min_energy": 0.01,
+        "max_energy": 0.70
+      },
+      "Uplifting": {
+        "min_acousticness": 0.30,
+        "max_acousticness": 0.99,
+        "min_danceability": 0.10,
+        "max_danceability": 0.70,
+        "min_energy": 0.30,
+        "max_energy": 0.70
+      }
+    }
   }
