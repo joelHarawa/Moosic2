@@ -4,10 +4,10 @@
 
 import styled from "styled-components";
 import isMobile from "is-mobile";
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../AuthContext";
+import { useEffect, useState } from "react";
 
 const Navbar = () => {
+    const [user, setUser] = useState("Guest");
     const [photo, setPhoto] = useState("https://img.icons8.com/?size=100&id=z-JBA_KtSkxG&format=png&color=000000");
     //const {token, login, logout} = useContext(AuthContext);
     const [isMobileDevice, setIsMobileDevice] = useState(false);
@@ -16,9 +16,24 @@ const Navbar = () => {
         setIsMobileDevice(isMobile());
     }, [isMobileDevice]);
 
+    useEffect(() => {
+        const getUserProfile = async () => {
+            const response = await fetch("http://localhost:4000/api/auth/user", {
+                method: "GET",
+                credentials: "include"
+            });
+            const rawData = await response.json();
+            const data = JSON.parse(rawData);
+            setPhoto(data.images[0].url);
+            setUser(data.display_name);
+        }
+        getUserProfile();
+    }, []);
+
     const login = async () => {
-        const resposnse = await fetch("http://localhost:4000/api/auth/login");
-        console.log(resposnse.data);
+        const response = await fetch("http://localhost:4000/api/auth/login");
+        const data = await response.json();
+        window.location.href = data.url;
     }
 
     const logout = async () => {
@@ -31,7 +46,7 @@ const Navbar = () => {
             <Middle>
                 <Logo ismobile={isMobileDevice.toString()}>Moosic</Logo>
             </Middle>
-                {1 === 2 ? 
+                {user !== "Guest" ? 
                     <Right>
                         <ProfileContainer ismobile={isMobileDevice.toString()}>
                             <ProfilePhoto src={photo}/>

@@ -1,16 +1,15 @@
 // Title: SearchComponent.js
 // Author: Joel Harawa
-import React, {useContext, useEffect, useState} from "react";
-import { AuthContext } from "../AuthContext";
+
+import React, {useEffect, useState} from "react";
 import styled, {keyframes} from "styled-components";
 
 const SearchComponent = () => {
     const [filteredMoods, setFilteredMoods] = useState({});
     const [moodData, setMoodData] = useState({});
     const [searchInput, setSearchInput] = useState("");
-    const [username, setUsername] = useState("Guest");
+    const [user, setUser] = useState("Guest");
     const [artists, setArtists] = useState({});
-    // const { token, login } = useContext(AuthContext);
     
     // Get the user's profile information
     useEffect(() => {
@@ -33,9 +32,22 @@ const SearchComponent = () => {
         fetchMoods();
     }, []);
 
+    useEffect(() => {
+        const getUserProfile = async () => {
+            const response = await fetch("http://localhost:4000/api/auth/user", {
+                method: "GET",
+                credentials: "include"
+            });
+            const rawData = await response.json();
+            const data = JSON.parse(rawData);
+            setUser(data.display_name);
+        }
+        getUserProfile();
+    }, []);
+
     const generatePlaylist = async (mood) => {
         try {
-            if (token) {
+            if (user !== "Guest") {
                 const response = await fetch("http://localhost:4000/api/post/generate", {
                     method: "POST",
                     headers: {
@@ -43,9 +55,10 @@ const SearchComponent = () => {
                     },
                     body: JSON.stringify({
                         userMood: mood
-
                     }),
-                })
+                    credentials: "include"
+                });
+                console.log(response);
             } else {
                 login();
             } 
@@ -72,7 +85,7 @@ const SearchComponent = () => {
         <SearchBox>
             <Greeting>
                 <GreetingText>
-                    Hi {username}, How are we feeling today?
+                    Hi {user}, How are we feeling today?
                 </GreetingText>
             </Greeting>
             <SearchArea>
