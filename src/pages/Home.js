@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import styled, {keyframes} from "styled-components";
 import SearchComponent from "../components/SearchComponent";
 
+// Main homepage
 const Home = () => {
     return (
         <Container>
@@ -13,6 +14,7 @@ const Home = () => {
     )
 }
 
+// Gradient animation
 const AnimationName = keyframes`
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }

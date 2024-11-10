@@ -2,63 +2,88 @@
 // Author: Joel Harawa
 
 import React, {useEffect, useState} from "react";
+import { useNavigate } from "react-router-dom";
 import styled, {keyframes} from "styled-components";
+import Loading from "./Loading";
 
 const SearchComponent = () => {
+    // State variables
     const [filteredMoods, setFilteredMoods] = useState({});
     const [moodData, setMoodData] = useState({});
     const [searchInput, setSearchInput] = useState("");
     const [user, setUser] = useState("Guest");
-    const [artists, setArtists] = useState({});
-    
-    // Get the user's profile information
-    useEffect(() => {
-        const fetchProfile = () => {
-
-        }
-        fetchProfile();
-    }, []);
+    const [userID, setUserID] = useState("");
+    // const [generating, setGenerating] = useState(false);
+    const navigate = useNavigate();
     
     useEffect(() => {
-        const fetchMoods = async () => {
-            const response = await fetch("http://localhost:4000/api/get/moods");
-            if (!response.ok) {
-                throw new Error("Failed to fetch moods");
+        const apiUrl = "http://localhost:4000/api/get/moods";
+        // Get the user moods from the backend, update state variable
+        const getMoods = async () => {
+            try {
+                // Fetch request to get the moods from the backend
+                const response = await fetch(apiUrl);
+                if (response.ok) {
+                    const data = await response.json();
+                    setMoodData(Object.keys(data.moods));
+                } else {
+                    throw new Error("Failed to fetch moods");
+                }
+            } catch (error) {
+                console.error("Error getting the moods from the user", error);
             }
-
-            const data = await response.json(); // Parse the response as JSON
-            setMoodData(Object.keys(data.moods));
         }
-        fetchMoods();
+        getMoods();
     }, []);
 
     useEffect(() => {
+        // Get the user profile, upadate user profile state variable
         const getUserProfile = async () => {
-            const response = await fetch("http://localhost:4000/api/auth/user", {
-                method: "GET",
-                credentials: "include"
-            });
-            const rawData = await response.json();
-            const data = JSON.parse(rawData);
-            setUser(data.display_name);
+            try {
+                const apiUrl = "http://localhost:4000/api/auth/user";
+                const response = await fetch(apiUrl, {
+                    method: "GET",
+                    credentials: "include"
+                });
+                if (response.status === 200) {
+                    const rawData = await response.json();
+                    const data = JSON.parse(rawData);
+                    setUser(data.display_name);
+                    setUserID(data.id);
+                    console.log(data);
+                }
+            } catch (error) {
+            }
         }
         getUserProfile();
     }, []);
-
+    
+    // Generate the user's desired playlist on their Sp
     const generatePlaylist = async (mood) => {
         try {
             if (user !== "Guest") {
-                const response = await fetch("http://localhost:4000/api/post/generate", {
+                const apiUrl = "http://localhost:4000/api/post/generate";
+                const response = await fetch(apiUrl, {
                     method: "POST",
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        userMood: mood
+                        userMood: mood,
+                        userID: userID
                     }),
                     credentials: "include"
+                })
+                .then(response => response.json())  
+                .then(data => {
+                    console.log(data);
+                    if (data.message) {
+                        navigate(`view/${data.message}`);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
                 });
-                console.log(response);
             } else {
                 login();
             } 
@@ -67,6 +92,7 @@ const SearchComponent = () => {
         }
     }
 
+    // Update results in the dropdown menu when searching for emotions
     const handleSearch = (input) => { 
         setSearchInput(input);
         console.log(filteredMoods);
@@ -98,9 +124,7 @@ const SearchComponent = () => {
                     {
                         searchInput.length > 0 && filteredMoods.length > 0 ? (
                             filteredMoods.map((mood, index) => (
-                                <Result 
-                                    key={index} 
-                                    onClick={() => generatePlaylist(mood)}>
+                                <Result key={index} onClick={() => generatePlaylist(mood)}>
                                         {mood}
                                 </Result>
                             ))
@@ -188,6 +212,11 @@ const Result = styled.li`
         background-size: 200% 200%;
         animation: ${AnimationName} 1s ease;
     }
+`;
+
+const Generating = styled.h1`
+    font-family: "Poppins", system-ui;
+    color: #4717F6;
 `;
 
 export default SearchComponent;

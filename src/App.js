@@ -2,6 +2,7 @@
 // Author: Joel Harawa
 
 import Home from "./pages/Home";
+import View from "./pages/View";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./style.css"
 
@@ -11,6 +12,7 @@ const App = () => {
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<Home/>}/>
+                    <Route path="/view/:id" element={<View/>}/>
                 </Routes>
             </BrowserRouter>
     )
