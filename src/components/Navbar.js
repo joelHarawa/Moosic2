@@ -22,7 +22,7 @@ const Navbar = () => {
     }, [isMobileDevice]);
     
     useEffect(() => {
-        const apiUrl = "http://localhost:4000/api/auth/user";
+        const apiUrl = "https://3.141.21.237/api/auth/user";
         // Retrieve user profile information, update user's state variables
         const getUserProfile = async () => {
             try {
@@ -48,7 +48,7 @@ const Navbar = () => {
 
     // Log the user into the client using Spotify API
     const login = async () => {
-        const response = await fetch("http://localhost:4000/api/auth/login");
+        const response = await fetch("https://3.141.21.237/api/auth/login");
         const data = await response.json();
         window.location.href = data.url;
     }
@@ -56,7 +56,7 @@ const Navbar = () => {
     // Log the user out the client
     const logout = async () => {
         try {
-            const apiUrl = "http://localhost:4000/api/auth/logout";
+            const apiUrl = "https://3.141.21.237/api/auth/logout";
             const response = await fetch(apiUrl, {
                 method: "POST",
                 credentials: "include"

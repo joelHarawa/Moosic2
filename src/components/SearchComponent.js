@@ -17,7 +17,7 @@ const SearchComponent = () => {
     const navigate = useNavigate();
     
     useEffect(() => {
-        const apiUrl = "http://localhost:4000/api/get/moods";
+        const apiUrl = "https://3.141.21.237/api/get/moods";
         // Get the user moods from the backend, update state variable
         const getMoods = async () => {
             try {
@@ -40,7 +40,7 @@ const SearchComponent = () => {
         // Get the user profile, upadate user profile state variable
         const getUserProfile = async () => {
             try {
-                const apiUrl = "http://localhost:4000/api/auth/user";
+                const apiUrl = "https://3.141.21.237/api/auth/user";
                 const response = await fetch(apiUrl, {
                     method: "GET",
                     credentials: "include"
@@ -62,7 +62,7 @@ const SearchComponent = () => {
     const generatePlaylist = async (mood) => {
         try {
             if (user !== "Guest") {
-                const apiUrl = "http://localhost:4000/api/post/generate";
+                const apiUrl = "https://3.141.21.237/api/post/generate";
                 const response = await fetch(apiUrl, {
                     method: "POST",
                     headers: {
